@@ -1,0 +1,13 @@
+services:
+  frontend_consistency.base:
+    class: Surmacz\FrontendConsistencyBundle\Services\Base
+    abstract: true
+    arguments: [@service_container]
+
+  frontend_consistency.compare:
+    class: Surmacz\FrontendConsistencyBundle\Services\Compare
+    parent: frontend_consistency.base
+
+  frontend_consistency.copy:
+    class: Surmacz\FrontendConsistencyBundle\Services\Copy
+    parent: frontend_consistency.base
