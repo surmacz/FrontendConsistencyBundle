@@ -24,12 +24,8 @@
         "symfony/http-kernel": "~2.3",
         "symfony/process": "~2.3",
         "symfony/framework-bundle": "~2.3",
-        "giorgiosironi/phpunit-selenium": "~1.4.1"
+        "phpunit/phpunit-selenium": ">=1.2"
     },
-    "repositories" : [{
-        "type" : "vcs",
-        "url" : "https://github.com/giorgiosironi/phpunit-selenium.git"
-    }],
     "autoload": {
         "psr-0": { "Surmacz\\FrontendConsistencyBundle": "" }
     },
