@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="description" content="FrontendConsistencyBundle : This Bundle provides system to help maintain frontend consistency on different web browsers">
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>FrontendConsistencyBundle</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/surmacz/FrontendConsistencyBundle">View on GitHub</a>
+
+          <h1 id="project_title">FrontendConsistencyBundle</h1>
+          <h2 id="project_tagline">This Bundle provides system to help maintain frontend consistency on different web browsers</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/surmacz/FrontendConsistencyBundle/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/surmacz/FrontendConsistencyBundle/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h1>
+<a name="frontend-consistency-bundle" class="anchor" href="#frontend-consistency-bundle"><span class="octicon octicon-link"></span></a>Frontend Consistency Bundle</h1>
+
+<p>Have you ever had problems with frontend consistency on your website, these annoying situations when frontend developer change code in one place and unintentionally broke view in another one or on another browser? If so, this bundle is for you. It provides a tool which maintains frontend consistency.</p>
+
+<p>It supports different web browsers, with different configurations (i.e. all that Selenium can handle), for example:</p>
+
+<ul>
+<li>Firefox for Windows/Linux,</li>
+<li>Chrome for Windows/Linux,</li>
+<li>Safari for Windows/Mac,</li>
+<li>Mobile browsers,</li>
+<li>etc.</li>
+</ul>
+
+<p><strong>Way of working</strong>:
+Bundle uses Selenium server(s) to generate screenshots (with simple phpunit tests) on different environments (browsers). Up-to-date screenshots must be generated locally after user makes some changes and before commit, to ensure consistency. Bundle compares new-generated screenshots with the ones saved in repository and if there's inconsistency it informs user about it. User has to decide if view changes are valid or invalid. User is aware of which view has changed.</p>
+
+<p><strong>Warning</strong>: to make this bundle work you have to have all the requested Selenium environments configurated. For more information visit Selenium website.</p>
+
+<h2>
+<a name="installation" class="anchor" href="#installation"><span class="octicon octicon-link"></span></a>Installation</h2>
+
+<p>Add to your Symfony composer.json the following code:</p>
+
+<div class="highlight highlight-json"><pre><span class="err">#</span> <span class="err">composer.json</span>
+<span class="p">{</span>
+    <span class="nt">"require"</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">"surmacz/frontend-consistency-bundle"</span><span class="p">:</span> <span class="s2">"dev-master"</span>
+    <span class="p">},</span>
+    <span class="nt">"repositories"</span> <span class="p">:</span> <span class="p">[{</span>
+        <span class="nt">"type"</span> <span class="p">:</span> <span class="s2">"vcs"</span><span class="p">,</span>
+        <span class="nt">"url"</span> <span class="p">:</span> <span class="s2">"https://github.com/surmacz/FrontendConsistencyBundle.git"</span>
+    <span class="p">}]</span>
+<span class="p">}</span>
+</pre></div>
+
+<p>Then update your vendors with composer update command.</p>
+
+<p>To register new bundle add this line of code into your AppKernel class:</p>
+
+<div class="highlight highlight-php"><pre><span class="c1"># app/AppKernel.php</span>
+
+<span class="k">new</span> <span class="nx">Surmacz\FrontendConsistencyBundle\FrontendConsistencyBundle</span><span class="p">()</span>
+</pre></div>
+
+<p>It is required to install ImageMagick package on your machine. Download version specific for your system:
+<a href="http://www.imagemagick.org/script/binary-releases.php">http://www.imagemagick.org/script/binary-releases.php</a>
+Unpack and save (and compile if needed) files on your disk ("compare" and "identify" commands will be needed).</p>
+
+<h2>
+<a name="configuration" class="anchor" href="#configuration"><span class="octicon octicon-link"></span></a>Configuration</h2>
+
+<p>Prepare new configuration into your config.yml file:</p>
+
+<div class="highlight highlight-yml"><pre><span class="c1"># app/config/config.yml</span>
+
+<span class="c1">#Frontend Consistency Bundle Configuration</span>
+<span class="l-Scalar-Plain">frontend_consistency</span><span class="p-Indicator">:</span>
+    <span class="l-Scalar-Plain">browser_prefix_url</span><span class="p-Indicator">:</span> <span class="s">'http://localhost'</span> <span class="c1">#prefix url of the browser - begining of each selenium test</span>
+    <span class="l-Scalar-Plain">screenshot_global_path</span><span class="p-Indicator">:</span> <span class="s">'consistency/global'</span> <span class="c1">#directory in Symfony root where global screenshots will be saved</span>
+    <span class="l-Scalar-Plain">screenshot_local_path</span><span class="p-Indicator">:</span>  <span class="s">'consistency/local'</span> <span class="c1">#directory in Symfony root where local screenshots will be saved; ignore this directory in git</span>
+    <span class="l-Scalar-Plain">php_unit_path</span><span class="p-Indicator">:</span> <span class="s">'phpunit'</span> <span class="c1">#command to run phpunit</span>
+    <span class="l-Scalar-Plain">php_unit_params</span><span class="p-Indicator">:</span> <span class="s">'-c</span><span class="nv"> </span><span class="s">app/phpunit.xml'</span> <span class="c1">#parameters for phpunit command (optional)</span>
+    <span class="l-Scalar-Plain">image_compare_path</span><span class="p-Indicator">:</span> <span class="s">'/usr/local/bin/compare'</span> <span class="c1">#path to compare command from ImageMagick package</span>
+    <span class="l-Scalar-Plain">image_identify_path</span><span class="p-Indicator">:</span> <span class="s">'/usr/local/bin/identify'</span> <span class="c1">#path to identify command from ImageMagick package</span>
+    <span class="l-Scalar-Plain">environments</span><span class="p-Indicator">:</span> <span class="c1">#below you define selenium servers envoronments parameters</span>
+        <span class="l-Scalar-Plain">pc_firefox</span><span class="p-Indicator">:</span> <span class="c1">#unique environment name</span>
+            <span class="l-Scalar-Plain">path</span><span class="p-Indicator">:</span> <span class="s">'pc/firefox'</span> <span class="c1">#screenshot subdirectory in screenshot global and local path</span>
+            <span class="l-Scalar-Plain">browser</span><span class="p-Indicator">:</span> <span class="s">'*firefox'</span> <span class="c1">#selenium webdriver, read selenium doc for more</span>
+            <span class="l-Scalar-Plain">host</span><span class="p-Indicator">:</span> <span class="s">'127.0.0.1'</span> <span class="c1">#server host</span>
+            <span class="l-Scalar-Plain">port</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">4444</span> <span class="c1">#server port</span>
+            <span class="l-Scalar-Plain">timeout</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">30</span>
+        <span class="l-Scalar-Plain">pc_ie</span><span class="p-Indicator">:</span>
+            <span class="l-Scalar-Plain">path</span><span class="p-Indicator">:</span> <span class="s">'pc/ie'</span>
+            <span class="l-Scalar-Plain">browser</span><span class="p-Indicator">:</span> <span class="s">'*iexplore'</span>
+            <span class="l-Scalar-Plain">host</span><span class="p-Indicator">:</span> <span class="s">'127.0.0.1'</span>
+            <span class="l-Scalar-Plain">port</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">4444</span>
+            <span class="l-Scalar-Plain">timeout</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">30</span>
+</pre></div>
+
+<p>Change above settings according to your needs and add as many environments as you like (and have configured).</p>
+
+<p>Next step is to write some selenium tests to generate screenshots. First you need to create directory "ConsistencyTests" in bundle, in which you want to have consistency tests.
+Below I attach example test for standard Acme Bundle:</p>
+
+<div class="highlight highlight-php"><pre><span class="c1"># src/Acme/DemoBundle/ConsistencyTests/Controller/DemoControllerTest.php</span>
+
+<span class="k">namespace</span> <span class="nx">Acme\DemoBundle\ConsistencyTests\Controller</span><span class="p">;</span>
+
+<span class="k">use</span> <span class="nx">Surmacz\FrontendConsistencyBundle\Lib\ConsistencyBase</span><span class="p">;</span>
+
+<span class="k">class</span> <span class="nc">DemoControllerTest</span> <span class="k">extends</span> <span class="nx">ConsistencyBase</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="nf">testDemo</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">open</span><span class="p">(</span><span class="s1">'/demo'</span><span class="p">);</span>
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">finalize</span><span class="p">();</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="k">function</span> <span class="nf">testHello</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">open</span><span class="p">(</span><span class="s1">'/demo/hello/Wojtek'</span><span class="p">);</span>
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">finalize</span><span class="p">();</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="k">function</span> <span class="nf">testContact</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">open</span><span class="p">(</span><span class="s1">'/demo/contact'</span><span class="p">);</span>
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">finalize</span><span class="p">();</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+
+<p>Each test looks similar and need to open page on which we want take screenshot. Then you need to run "finalize()" method which generates screenshot. For more information about writing these test read here (<a href="https://phpunit.de/manual/3.7/en/selenium.html">https://phpunit.de/manual/3.7/en/selenium.html</a>).</p>
+
+<h2>
+<a name="usage" class="anchor" href="#usage"><span class="octicon octicon-link"></span></a>Usage</h2>
+
+<p>After that you can run your first verification which generates screenshots and place them into global directory:</p>
+
+<div class="highlight highlight-bash"><pre>php app/console consistency:verify --init
+</pre></div>
+
+<p>"init" param should be used only when there are no screenshots in global directory (i.e. at the begining of your adventure with this bundle). Later use only the following code to verify frontend consistency:</p>
+
+<div class="highlight highlight-bash"><pre>php app/console consistency:verify
+</pre></div>
+
+<p>You can run verification in "no verbose" mode - it is recommended for continuous integration processes. It returns "0" for inconsistency or "1" for consistency:</p>
+
+<div class="highlight highlight-bash"><pre>php app/console consistency:verify --no-verbose
+</pre></div>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">FrontendConsistencyBundle maintained by <a href="https://github.com/surmacz">surmacz</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+              <script type="text/javascript">
+            var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+            document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+          </script>
+          <script type="text/javascript">
+            try {
+              var pageTracker = _gat._getTracker("UA-55691067-1");
+            pageTracker._trackPageview();
+            } catch(err) {}
+          </script>
+
+
+  </body>
+</html>
