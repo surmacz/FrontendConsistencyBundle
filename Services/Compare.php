@@ -118,7 +118,7 @@ class Compare extends Base
     {
         $differenceFiles = [];
         foreach($this->paired as $file) {
-            $tempOutput = $this->localPath.'\\'.md5(uniqid(rand(), true));
+            $tempOutput = $this->localPath.'/'.md5(uniqid(rand(), true));
             $filesSize = [];
             foreach([$this->globalPath.$file, $this->localPath.$file] as $fileToIdentify) {
                 $identifyCommand = $this->identifyTool." {$fileToIdentify}";

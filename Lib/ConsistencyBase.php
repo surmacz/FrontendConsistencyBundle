@@ -91,7 +91,7 @@ abstract class ConsistencyBase extends \PHPUnit_Extensions_SeleniumTestCase
      */
     protected function setUp()
     {
-        require_once dirname(__DIR__).'/../../../app/AppKernel.php';
+        require_once dirname(__DIR__).'/../../../../../app/AppKernel.php';
         $this->kernel = new \AppKernel('test', true);
         $this->kernel->boot();
         $this->container = $this->kernel->getContainer();
@@ -183,10 +183,10 @@ abstract class ConsistencyBase extends \PHPUnit_Extensions_SeleniumTestCase
     protected function prepareScreenshotPath()
     {
         if (!preg_match('/^(.+)\\\ConsistencyTests\\\(.+)$/', $this->testClassName, $classMatches)) {
-            throw new \Exception("Wrong context class: {$class}");
+            throw new \Exception("Wrong context class: {$this->testClassName}");
         }
         if (!preg_match('/^test(.+)$/', $this->getName(), $functionMatches)) {
-            throw new \Exception("Wrong context function: {$function}");
+            throw new \Exception("Wrong context function: {$this->getName()}");
         }
         $topPath = str_replace('\\', '', $classMatches[1]);
         $lastPathArray = explode('\\', $classMatches[2]);

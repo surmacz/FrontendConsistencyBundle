@@ -97,16 +97,16 @@ class ConsistencyTestCommand extends FrontendConsistencyCommand
             ->getContainer()
             ->getParameter('frontend_consistency.php_unit_params');
         $this->screenshotGlobalPath = $this->topDir
-            .'\\'
+            .'/'
             .$this
                 ->getContainer()
                 ->getParameter('frontend_consistency.screenshot_global_path');
         $this->screenshotLocalPath = $this->topDir
-            .'\\'
+            .'/'
             .$this
                 ->getContainer()
                 ->getParameter('frontend_consistency.screenshot_local_path');
-        $this->errorlogPath = $this->screenshotLocalPath.'\\error.log';
+        $this->errorlogPath = $this->screenshotLocalPath.'/error.log';
         $this->output = $output;
         $this->verbose = false === $input->getOption('no-verbose');
         $this->init = $input->getOption('init');
